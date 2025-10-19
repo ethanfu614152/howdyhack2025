@@ -1,0 +1,17 @@
+# Python caches
+__pycache__/
+*.py[cod]
+
+# Virtual environments
+venv/
+.env/
+
+# Data files (optional if you don’t want to version large CSVs)
+*.csv
+
+# System files
+.DS_Store  # macOS
+Thumbs.db  # Windows
+
+# IDE files
+.vscode/

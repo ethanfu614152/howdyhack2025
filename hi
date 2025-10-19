@@ -1,0 +1,43 @@
+import requests
+from bs4 import BeautifulSoup
+import json
+
+BASE_URL = "https://getinvolved.tamu.edu"
+URL = f"{BASE_URL}/organizations"
+
+headers = {
+    "User-Agent": "AggieOrgFinderBot/1.0 (+https://yourproject.example; contact: your@email.edu)"
+}
+
+response = requests.get(URL, headers=headers)
+response.raise_for_status()
+
+soup = BeautifulSoup(response.text, "html.parser")
+
+orgs_data = []
+
+# Adjust these selectors based on Inspect Element results:
+cards = soup.select("div.organization-card, div.row.org")  # tries both possible structures
+for card in cards:
+    name_tag = card.find("a")
+    if not name_tag:
+        continue
+
+    name = name_tag.get_text(strip=True)
+    link = name_tag.get("href")
+    if link and not link.startswith("http"):
+        link = BASE_URL + link
+
+    category_tag = card.find("div", class_="organization-category")
+    category = category_tag.get_text(strip=True) if category_tag else "Unknown"
+
+    orgs_data.append({
+        "name": name,
+        "category": category,
+        "link": link
+    })
+
+with open("tamu_orgs_page1.json", "w", encoding="utf-8") as f:
+    json.dump(orgs_data, f, ensure_ascii=False, indent=2)
+
+print(f"Scraped {len(orgs_data)} organizations from first page!")
