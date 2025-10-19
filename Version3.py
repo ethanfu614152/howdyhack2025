@@ -78,7 +78,7 @@ def get_next_recommendation(orgs_sorted, shown_indices):
         if idx not in shown_indices:
             return idx, orgs_sorted.iloc[idx]
     return None, None
-
+#new
 def record_feedback(user_feedback, shown_indices, idx, liked):
     user_feedback[idx] = 1 if liked else 0
     shown_indices.add(idx)
